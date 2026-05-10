@@ -1,4 +1,16 @@
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 import { Transaction } from '../../services/api';
 
 interface ChartsProps {
@@ -26,22 +38,29 @@ export const Charts = ({ transactions }: ChartsProps) => {
   ];
 
   transactions.forEach((t) => {
-    const bucket = riskBuckets.find((b) => t.risk_score >= b.min && t.risk_score <= b.max);
+    const bucket = riskBuckets.find(
+      (b) => t.risk_score >= b.min && t.risk_score <= b.max
+    );
     if (bucket) bucket.value += 1;
   });
 
   const COLORS = {
-    approved: '#10b981',
-    manual_review: '#f59e0b',
-    escalated: '#ef4444',
+    approved: '#16a34a', // green
+    manual_review: '#f59e0b', // yellow
+    escalated: '#ef4444', // red
   };
 
-  const PIE_COLORS = ['#10b981', '#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6'];
+  const PIE_COLORS = ['#16a34a', '#f59e0b', '#ef4444', '#2563eb', '#f97316'];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-white mb-4">Decision Distribution</h3>
+      
+      {/* PIE CHART */}
+      <div className="bg-surface border border-borderLight rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-primaryText mb-4">
+          Decision Distribution
+        </h3>
+
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
@@ -49,47 +68,60 @@ export const Charts = ({ transactions }: ChartsProps) => {
               cx="50%"
               cy="50%"
               labelLine={false}
-              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+              label={({ name, percent }) =>
+                `${name}: ${(percent * 100).toFixed(0)}%`
+              }
               outerRadius={100}
-              fill="#8884d8"
               dataKey="value"
             >
               {decisionData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={COLORS[entry.name as keyof typeof COLORS] || PIE_COLORS[index % PIE_COLORS.length]}
+                  fill={
+                    COLORS[entry.name as keyof typeof COLORS] ||
+                    PIE_COLORS[index % PIE_COLORS.length]
+                  }
                 />
               ))}
             </Pie>
+
             <Tooltip
               contentStyle={{
-                backgroundColor: '#1f2937',
-                border: '1px solid #374151',
+                backgroundColor: '#ffffff',
+                border: '1px solid #e5e7eb',
                 borderRadius: '0.5rem',
-                color: '#fff',
+                color: '#111827',
               }}
             />
           </PieChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-white mb-4">Risk Score Distribution</h3>
+      {/* BAR CHART */}
+      <div className="bg-surface border border-borderLight rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-primaryText mb-4">
+          Risk Score Distribution
+        </h3>
+
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={riskBuckets}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey="name" stroke="#9ca3af" />
-            <YAxis stroke="#9ca3af" />
+            <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" />
+
+            <XAxis dataKey="name" stroke="#6b7280" />
+            <YAxis stroke="#6b7280" />
+
             <Tooltip
               contentStyle={{
-                backgroundColor: '#1f2937',
-                border: '1px solid #374151',
+                backgroundColor: '#ffffff',
+                border: '1px solid #e5e7eb',
                 borderRadius: '0.5rem',
-                color: '#fff',
+                color: '#111827',
               }}
             />
+
             <Legend />
-            <Bar dataKey="value" fill="#3b82f6" name="Transactions" />
+
+            <Bar dataKey="value" fill="#2563eb" name="Transactions" />
           </BarChart>
         </ResponsiveContainer>
       </div>

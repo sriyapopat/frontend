@@ -74,7 +74,7 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-background text-primaryText">
       <Header onGenerateData={handleGenerateData} isGenerating={isGenerating} />
 
       <main className="max-w-[1600px] mx-auto px-6 py-8 space-y-6">
@@ -91,10 +91,10 @@ export const Dashboard = () => {
         <Alerts alerts={alerts} />
 
         {loading ? (
-          <div className="bg-gray-800 border border-gray-700 rounded-lg p-12 flex items-center justify-center">
+          <div className="bg-surface border border-borderLight rounded-lg p-12 flex items-center justify-center">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-400">Loading transactions...</p>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-secondaryText">Loading transactions...</p>
             </div>
           </div>
         ) : (
